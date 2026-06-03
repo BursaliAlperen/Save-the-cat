@@ -1,5 +1,3 @@
-oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını cixince uyarı versin kırmızı olsun vb ve AAA unique eglenceli leveller uap leveller hep kendini tekrar ediyot ve yeni nirsey ornek tuzak vb oldumu popup acılsın tutorial ok butonu olsun ve AAA akıllıca tasarlanna stageler yap
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -801,6 +799,90 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
             font-family: 'Nunito', sans-serif;
         }
 
+        .stage-brief-card {
+            gap: 14px;
+            border-color: #1f6feb;
+            box-shadow: 0 12px 0 #1f6feb, 0 22px 50px rgba(31, 111, 235, 0.25);
+        }
+
+        .stage-brief-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border: 3px solid #495057;
+            border-radius: 999px;
+            background: #fff4cc;
+            color: #495057;
+            font-weight: 950;
+            box-shadow: 0 3px 0 #495057;
+        }
+
+        .stage-brief-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+        }
+
+        .stage-brief-row {
+            background: rgba(77, 171, 247, 0.10);
+            border: 2px dashed rgba(73, 80, 87, 0.45);
+            border-radius: 16px;
+            padding: 10px 12px;
+            color: #495057;
+            line-height: 1.35;
+            font-weight: 800;
+        }
+
+        .draw-warning-toast {
+            position: absolute;
+            top: calc(175px + var(--safe-area-top));
+            left: 50%;
+            transform: translateX(-50%) scale(0.92);
+            width: min(88%, 430px);
+            padding: 12px 16px;
+            border: 4px solid #c0392b;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #ff7675 0%, #e74c3c 100%);
+            color: #ffffff;
+            font-weight: 950;
+            text-align: center;
+            z-index: 120;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 6px 0 #922b21, 0 15px 25px rgba(192,57,43,0.25);
+            transition: opacity 0.18s ease, transform 0.18s ease;
+            text-shadow: 0 2px 0 rgba(0,0,0,0.15);
+        }
+
+        .draw-warning-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        .danger-zone-marker {
+            position: absolute;
+            border: 4px dashed #e74c3c;
+            border-radius: 50%;
+            z-index: 19;
+            pointer-events: none;
+            opacity: 0;
+            box-shadow: 0 0 0 6px rgba(231, 76, 60, 0.16), 0 0 25px rgba(231, 76, 60, 0.45);
+            transform: translate(-50%, -50%) scale(0.82);
+        }
+
+        .danger-zone-marker.show {
+            animation: dangerPulse 0.9s ease-out;
+        }
+
+        @keyframes dangerPulse {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.72); }
+            18% { opacity: 1; transform: translate(-50%, -50%) scale(1.04); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.24); }
+        }
+
         .shop-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1507,6 +1589,18 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
             </svg>
         </div>
 
+        <div class="draw-warning-toast" id="draw-warning-toast">⚠️ Kediyi veya kovanı kapatma! Bir nefes koridoru bırak.</div>
+        <div id="danger-zone-layer"></div>
+
+        <div class="modal-overlay" id="stage-brief-modal">
+            <div class="modal-content stage-brief-card">
+                <div class="stage-brief-pill" id="stage-brief-pill">🧠 SMART STAGE</div>
+                <h2 class="modal-title" id="stage-brief-title">Stage Briefing</h2>
+                <div class="stage-brief-grid" id="stage-brief-body"></div>
+                <button class="menu-btn primary" id="btn-stage-brief-ok">OK, LET ME DRAW!</button>
+            </div>
+        </div>
+
         <div class="modal-overlay" id="pause-modal">
             <div class="modal-content">
                 <h2 class="modal-title">GAME PAUSED</h2>
@@ -1553,6 +1647,9 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
         </div>
 
     </div>
+
+    <audio id="loading-music" src="assets/loading.mp3" loop preload="auto"></audio>
+    <audio id="background-music" src="assets/background.mp3" loop preload="auto"></audio>
 
     <script>
         let audioCtx = null;
@@ -1682,6 +1779,47 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
                 setTimeout(() => this.playTone(180, 'sawtooth', 0.3, 0.15), 100);
             }
         };
+
+
+        const MusicManager = {
+            loading: document.getElementById('loading-music'),
+            background: document.getElementById('background-music'),
+            unlocked: false,
+            init: function() {
+                [this.loading, this.background].forEach(audio => {
+                    if (!audio) return;
+                    audio.volume = 0.42;
+                    audio.loop = true;
+                });
+
+                const unlock = () => {
+                    this.unlocked = true;
+                    this.playBackground();
+                    window.removeEventListener('pointerdown', unlock);
+                    window.removeEventListener('touchstart', unlock);
+                };
+
+                window.addEventListener('pointerdown', unlock, { once: true });
+                window.addEventListener('touchstart', unlock, { once: true });
+            },
+            playLoading: function() {
+                if (!this.loading) return;
+                if (this.background) this.background.pause();
+                this.loading.currentTime = 0;
+                this.loading.play().catch(() => {});
+            },
+            playBackground: function() {
+                if (!this.background) return;
+                if (this.loading) this.loading.pause();
+                this.background.play().catch(() => {});
+            },
+            stopAll: function() {
+                if (this.loading) this.loading.pause();
+                if (this.background) this.background.pause();
+            }
+        };
+
+        MusicManager.init();
 
         const STATE = {
             coins: parseInt(localStorage.getItem('cat_coins')) || 0,
@@ -1994,6 +2132,306 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
                     { type: TRAP_TYPES.CANNON, x: 0.9, y: 0.5, angle: 150 }
                 ]
             }
+            ,
+            {
+                name: "Stage 21: Mirror Split",
+                theme: THEMES.SPACE,
+                cat: { x: 0.28, y: 0.54 },
+                hives: [{ x: 0.78, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.12, y: 0.64, w: 105, h: 22 },
+                    { type: 'rect', x: 0.56, y: 0.48, w: 125, h: 22 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.MIRROR, x: 0.46, y: 0.36, w: 94, h: 18 },
+                    { type: TRAP_TYPES.LASER, x: 0.16, y: 0.30, w: 240, h: 10 }
+                ]
+            },
+            {
+                name: "Stage 22: Trap Door Lesson",
+                theme: THEMES.DESERT,
+                cat: { x: 0.52, y: 0.46 },
+                hives: [{ x: 0.18, y: 0.20 }, { x: 0.82, y: 0.20 }],
+                obstacles: [
+                    { type: 'rect', x: 0.38, y: 0.62, w: 120, h: 20 },
+                    { type: 'spikes', x: 0.08, y: 0.76, w: 0.22, h: 30 },
+                    { type: 'spikes', x: 0.70, y: 0.76, w: 0.22, h: 30 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.TRAP_DOOR, x: 0.44, y: 0.55, w: 110, h: 22 }
+                ]
+            },
+            {
+                name: "Stage 23: Twin Wind Hooks",
+                theme: THEMES.ICE,
+                cat: { x: 0.50, y: 0.48 },
+                hives: [{ x: 0.50, y: 0.14 }],
+                obstacles: [
+                    { type: 'rect', x: 0.20, y: 0.62, w: 82, h: 18 },
+                    { type: 'rect', x: 0.64, y: 0.62, w: 82, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.WIND_TUNNEL, x: 0.04, y: 0.36, w: 120, h: 82, force: 3.4 },
+                    { type: TRAP_TYPES.WIND_TUNNEL, x: 0.74, y: 0.36, w: 120, h: 82, force: -3.4 }
+                ]
+            },
+            {
+                name: "Stage 24: Bomb Roof",
+                theme: THEMES.GRASS,
+                cat: { x: 0.62, y: 0.56 },
+                hives: [{ x: 0.24, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.50, y: 0.68, w: 120, h: 22 },
+                    { type: 'gear', x: 0.32, y: 0.52, r: 34 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.BOMB, x: 0.42, y: 0.28, r: 28 },
+                    { type: TRAP_TYPES.CANNON, x: 0.82, y: 0.28, angle: 145 }
+                ]
+            },
+            {
+                name: "Stage 25: Acid Bridge IQ",
+                theme: THEMES.DESERT,
+                cat: { x: 0.34, y: 0.47 },
+                hives: [{ x: 0.78, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.18, y: 0.58, w: 92, h: 20 },
+                    { type: 'rect', x: 0.66, y: 0.58, w: 92, h: 20 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.ACID, x: 0.38, y: 0.66, w: 145, h: 34 },
+                    { type: TRAP_TYPES.SPIDER_WEB, x: 0.56, y: 0.36, r: 46 }
+                ]
+            },
+            {
+                name: "Stage 26: Spike Ball Orbit",
+                theme: THEMES.SPACE,
+                cat: { x: 0.50, y: 0.50 },
+                hives: [{ x: 0.20, y: 0.18 }, { x: 0.80, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.39, y: 0.66, w: 118, h: 20 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.SPIKE_BALL, x: 0.28, y: 0.42, r: 30 },
+                    { type: TRAP_TYPES.SPIKE_BALL, x: 0.72, y: 0.42, r: 30 },
+                    { type: TRAP_TYPES.GRAVITY_WELL, x: 0.50, y: 0.30, r: 58, strength: 1.1 }
+                ]
+            },
+            {
+                name: "Stage 27: Fire Jet Timing",
+                theme: THEMES.LAVA,
+                cat: { x: 0.58, y: 0.44 },
+                hives: [{ x: 0.28, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.48, y: 0.56, w: 116, h: 20 },
+                    { type: 'rect', x: 0.16, y: 0.46, w: 82, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.FIRE_JET, x: 0.38, y: 0.62, w: 42, h: 118 },
+                    { type: TRAP_TYPES.FIRE_WALL, x: 0.70, y: 0.34, w: 26, h: 176 }
+                ]
+            },
+            {
+                name: "Stage 28: Frozen Needle",
+                theme: THEMES.ICE,
+                cat: { x: 0.46, y: 0.42 },
+                hives: [{ x: 0.72, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.26, y: 0.58, w: 160, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.ICE_SPIKE, x: 0.18, y: 0.66, w: 95, h: 32 },
+                    { type: TRAP_TYPES.FREEZE_RAY, x: 0.58, y: 0.36, w: 150, h: 16 }
+                ]
+            },
+            {
+                name: "Stage 29: Ghost Web Switch",
+                theme: THEMES.GRASS,
+                cat: { x: 0.68, y: 0.52 },
+                hives: [{ x: 0.18, y: 0.16 }, { x: 0.50, y: 0.14 }],
+                obstacles: [
+                    { type: 'rect', x: 0.58, y: 0.64, w: 112, h: 20 },
+                    { type: 'rect', x: 0.20, y: 0.50, w: 82, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.GHOST, x: 0.44, y: 0.42, r: 30 },
+                    { type: TRAP_TYPES.SPIDER_WEB, x: 0.62, y: 0.34, r: 44 }
+                ]
+            },
+            {
+                name: "Stage 30: Cannon Crossfire",
+                theme: THEMES.LAVA,
+                cat: { x: 0.50, y: 0.54 },
+                hives: [{ x: 0.50, y: 0.15 }],
+                obstacles: [
+                    { type: 'rect', x: 0.36, y: 0.66, w: 150, h: 24 },
+                    { type: 'gear', x: 0.50, y: 0.36, r: 36 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.CANNON, x: 0.08, y: 0.40, angle: 24 },
+                    { type: TRAP_TYPES.CANNON, x: 0.88, y: 0.40, angle: 156 }
+                ]
+            },
+            {
+                name: "Stage 31: Portal Bouncer",
+                theme: THEMES.SPACE,
+                cat: { x: 0.25, y: 0.56 },
+                hives: [{ x: 0.82, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.12, y: 0.66, w: 104, h: 20 },
+                    { type: 'rect', x: 0.62, y: 0.52, w: 118, h: 20 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.PORTAL, x: 0.34, y: 0.42, r: 32, linkedTo: 1 },
+                    { type: TRAP_TYPES.PORTAL, x: 0.70, y: 0.30, r: 32, linkedTo: 0 },
+                    { type: TRAP_TYPES.BOUNCER, x: 0.54, y: 0.60, r: 28 }
+                ]
+            },
+            {
+                name: "Stage 32: Conveyor Saw Brain",
+                theme: THEMES.DESERT,
+                cat: { x: 0.42, y: 0.48 },
+                hives: [{ x: 0.24, y: 0.18 }, { x: 0.76, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.28, y: 0.60, w: 176, h: 20 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.CONVEYOR, x: 0.22, y: 0.52, w: 110, h: 22, speed: 2.8 },
+                    { type: TRAP_TYPES.SAW, x: 0.70, y: 0.48, r: 34 }
+                ]
+            },
+            {
+                name: "Stage 33: Poison Gravity Cup",
+                theme: THEMES.SPACE,
+                cat: { x: 0.56, y: 0.44 },
+                hives: [{ x: 0.44, y: 0.14 }],
+                obstacles: [
+                    { type: 'rect', x: 0.45, y: 0.58, w: 116, h: 20 },
+                    { type: 'spikes', x: 0.08, y: 0.76, w: 0.26, h: 30 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.POISON_CLOUD, x: 0.32, y: 0.54, r: 52 },
+                    { type: TRAP_TYPES.GRAVITY_WELL, x: 0.70, y: 0.36, r: 62, strength: 1.2 }
+                ]
+            },
+            {
+                name: "Stage 34: Axe Ice Wall",
+                theme: THEMES.ICE,
+                cat: { x: 0.32, y: 0.54 },
+                hives: [{ x: 0.72, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.20, y: 0.66, w: 118, h: 20 },
+                    { type: 'rect', x: 0.66, y: 0.54, w: 78, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.SWINGING_AXE, x: 0.48, y: 0.24, length: 92 },
+                    { type: TRAP_TYPES.ICE_WALL, x: 0.60, y: 0.38, w: 30, h: 160 }
+                ]
+            },
+            {
+                name: "Stage 35: Prism Finale",
+                theme: THEMES.SPACE,
+                cat: { x: 0.50, y: 0.52 },
+                hives: [{ x: 0.18, y: 0.16 }, { x: 0.82, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.36, y: 0.66, w: 150, h: 22 },
+                    { type: 'gear', x: 0.30, y: 0.38, r: 32 },
+                    { type: 'gear', x: 0.70, y: 0.38, r: 32 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.BLACK_HOLE, x: 0.50, y: 0.30, r: 44 },
+                    { type: TRAP_TYPES.LASER, x: 0.22, y: 0.44, w: 260, h: 10 },
+                    { type: TRAP_TYPES.TIME_BOMB, x: 0.50, y: 0.56, timer: 6 }
+                ]
+            }
+
+            ,
+            {
+                name: "Stage 36: Volcano Elevator",
+                theme: THEMES.LAVA,
+                cat: { x: 0.40, y: 0.50 },
+                hives: [{ x: 0.72, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.24, y: 0.62, w: 112, h: 20 },
+                    { type: 'rect', x: 0.58, y: 0.48, w: 92, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.MOVING_PLATFORM, x: 0.40, y: 0.42, w: 118, h: 20 },
+                    { type: TRAP_TYPES.FIRE_JET, x: 0.18, y: 0.66, w: 45, h: 110 }
+                ]
+            },
+            {
+                name: "Stage 37: Arctic Crosswind",
+                theme: THEMES.ICE,
+                cat: { x: 0.58, y: 0.45 },
+                hives: [{ x: 0.22, y: 0.16 }, { x: 0.78, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.44, y: 0.60, w: 120, h: 18 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.WIND_FAN, x: 0.18, y: 0.44, force: 3.2 },
+                    { type: TRAP_TYPES.FREEZE_RAY, x: 0.54, y: 0.34, w: 160, h: 16 }
+                ]
+            },
+            {
+                name: "Stage 38: Desert Mine Cart",
+                theme: THEMES.DESERT,
+                cat: { x: 0.48, y: 0.54 },
+                hives: [{ x: 0.50, y: 0.15 }],
+                obstacles: [
+                    { type: 'rect', x: 0.30, y: 0.66, w: 170, h: 22 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.ROLLING_BOULDER, x: 0.12, y: 0.42, r: 30, vx: 2.6 },
+                    { type: TRAP_TYPES.CONVEYOR, x: 0.48, y: 0.56, w: 115, h: 22, speed: -2.4 }
+                ]
+            },
+            {
+                name: "Stage 39: Haunted Circuit",
+                theme: THEMES.SPACE,
+                cat: { x: 0.36, y: 0.48 },
+                hives: [{ x: 0.74, y: 0.17 }],
+                obstacles: [
+                    { type: 'rect', x: 0.24, y: 0.60, w: 110, h: 20 },
+                    { type: 'rect', x: 0.60, y: 0.54, w: 100, h: 20 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.GHOST, x: 0.54, y: 0.40, r: 30 },
+                    { type: TRAP_TYPES.ELECTRIC, x: 0.70, y: 0.42, r: 54 }
+                ]
+            },
+            {
+                name: "Stage 40: Bee Labyrinth",
+                theme: THEMES.GRASS,
+                cat: { x: 0.50, y: 0.56 },
+                hives: [{ x: 0.18, y: 0.14 }, { x: 0.82, y: 0.14 }, { x: 0.50, y: 0.20 }],
+                obstacles: [
+                    { type: 'rect', x: 0.20, y: 0.44, w: 90, h: 18 },
+                    { type: 'rect', x: 0.60, y: 0.44, w: 90, h: 18 },
+                    { type: 'rect', x: 0.36, y: 0.66, w: 150, h: 22 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.SAW, x: 0.30, y: 0.56, r: 32 },
+                    { type: TRAP_TYPES.SAW, x: 0.70, y: 0.56, r: 32 }
+                ]
+            },
+            {
+                name: "Stage 41: Grandmaster Rescue",
+                theme: THEMES.SPACE,
+                cat: { x: 0.50, y: 0.48 },
+                hives: [{ x: 0.16, y: 0.16 }, { x: 0.84, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.34, y: 0.64, w: 160, h: 22 },
+                    { type: 'spikes', x: 0.10, y: 0.76, w: 0.24, h: 30 },
+                    { type: 'spikes', x: 0.66, y: 0.76, w: 0.24, h: 30 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.PORTAL, x: 0.28, y: 0.36, r: 30, linkedTo: 1 },
+                    { type: TRAP_TYPES.PORTAL, x: 0.72, y: 0.36, r: 30, linkedTo: 0 },
+                    { type: TRAP_TYPES.BLACK_HOLE, x: 0.50, y: 0.26, r: 42 },
+                    { type: TRAP_TYPES.TIME_BOMB, x: 0.50, y: 0.56, timer: 5 }
+                ]
+            }
         ];
 
         function seededRandom(seed) {
@@ -2221,6 +2659,151 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
                 }
             }
             return false;
+        }
+
+
+        const TRAP_TUTORIALS = {
+            saw: ['🪚 Rotating saws punish straight shields.', 'Angle your line so the cat rolls away, not into the blade.'],
+            spikes: ['🔺 Spikes are instant danger zones.', 'Build a roof or cradle that keeps physics from sliding the cat downward.'],
+            moving_platform: ['↔️ Moving platforms shove anything resting on them.', 'Leave enough space for platform travel before releasing bees.'],
+            laser: ['🔴 Lasers burn across a lane.', 'Draw a thick diagonal baffle, then keep the cat outside the beam path.'],
+            fireball: ['🔥 Fire launchers shoot projectiles.', 'Curved shields deflect better than flat walls.'],
+            wind_fan: ['💨 Fans push the cat and bees.', 'Use hooks and pockets so the wind cannot peel the shield away.'],
+            magnet: ['🧲 Magnets bend movement toward their core.', 'Do not draw tight cages; give the cat a safe drift buffer.'],
+            portal: ['🌀 Portals teleport threats.', 'Protect both portal exits before pressing release.'],
+            bomb: ['💣 Bombs explode on contact.', 'Keep shield lines away from the blast center.'],
+            electric: ['⚡ Electric fields shock through open gaps.', 'Close the bee side, but leave breathing room around the cat.'],
+            acid: ['🧪 Acid pools melt unsafe routes.', 'Bridge the pool with a line that cannot tip into it.'],
+            falling_rock: ['🪨 Falling rocks add gravity pressure.', 'A sloped roof sheds rocks away from the cat.'],
+            spider_web: ['🕸️ Webs slow movement.', 'Use the slow zone to your advantage by redirecting bees.'],
+            ghost: ['👻 Ghosts phase around simple walls.', 'Layer two angled barriers instead of one straight line.'],
+            bouncer: ['🟣 Bouncers launch the cat.', 'Cup the cat from above so rebounds stay controlled.'],
+            conveyor: ['➡️ Conveyors drag objects sideways.', 'Anchor the shield against the direction of travel.'],
+            cannon: ['🏰 Cannons fire heavy shots.', 'Give cannonballs a ramp that sends them away.'],
+            black_hole: ['⚫ Black holes pull everything inward.', 'Protect from the pull direction and avoid tight cages.'],
+            time_bomb: ['⏱️ Timed bombs trigger during survival.', 'Draw blast deflectors before the timer reaches zero.'],
+            freeze_ray: ['❄️ Freeze rays make movement brittle.', 'Block the ray with a line that also supports the cat.'],
+            poison_cloud: ['☠️ Poison clouds expand and pulse.', 'Keep the cat above or beside the cloud radius.'],
+            swinging_axe: ['🪓 Swinging axes sweep an arc.', 'Draw outside the arc; do not rely on a tiny wall.'],
+            rolling_boulder: ['⚙️ Boulders roll with momentum.', 'A wedge-shaped ramp is safer than a vertical wall.'],
+            trap_door: ['🚪 Trap doors can open below you.', 'Give the cat a second floor before release.'],
+            spike_ball: ['🔴 Spike balls patrol round spaces.', 'Use concave shields to redirect their bounce.'],
+            fire_jet: ['🌋 Fire jets burst upward.', 'Bridge over them and keep the cat away from the flame column.'],
+            ice_wall: ['🧊 Ice walls change bounce angles.', 'Soft curves beat hard corners on ice stages.'],
+            gravity_well: ['🪐 Gravity wells bend trajectories.', 'Use a wide shelter with an escape buffer.'],
+            mirror: ['🪞 Mirrors reflect hazards.', 'Angle your shield so reflections miss the cat.'],
+            ice_spike: ['💎 Ice spikes are sharp and slippery.', 'Do not let the cat roll down into their tips.'],
+            fire_wall: ['🔥 Fire walls deny a whole corridor.', 'Create a detour lane and deflect bees before the wall.'],
+            wind_tunnel: ['🌪️ Wind tunnels apply continuous force.', 'Hook the shield into the wind like an umbrella.']
+        };
+
+        const THEME_TIPS = {
+            grass: 'Classic physics: gravity and friction are balanced. Focus on a clean bee shield.',
+            lava: 'Lava floor burns. Keep the cat elevated and never let your line tip it downward.',
+            ice: 'Ice is slippery. Use U-shaped cradles and avoid narrow cages.',
+            desert: 'Desert stages favor moving traps and projectiles. Build angled deflectors.',
+            space: 'Space hazards distort paths. Leave extra buffer around portals, wells, and black holes.'
+        };
+
+        function describeStage(stage) {
+            const uniqueTraps = [...new Set((stage.traps || []).map(trap => trap.type))];
+            const trapLines = uniqueTraps.length
+                ? uniqueTraps.slice(0, 3).flatMap(type => TRAP_TUTORIALS[type] || [`⚠️ New trap: ${type}`, 'Study the motion, then draw a smart shield.'])
+                : ['🐝 No special trap yet: learn the shield rhythm.', 'Draw a shelter, then release bees when the cat has room to breathe.'];
+
+            return [
+                `🎯 Goal: survive ${timerSeconds} seconds after releasing bees.`,
+                `🌍 Theme: ${THEME_TIPS[stage.theme] || THEME_TIPS.grass}`,
+                ...trapLines.slice(0, 4),
+                '🚫 Red zones mean: do not draw directly around the cat or the hive.'
+            ];
+        }
+
+        function showStageBriefing(stage) {
+            const modal = document.getElementById('stage-brief-modal');
+            const title = document.getElementById('stage-brief-title');
+            const body = document.getElementById('stage-brief-body');
+            const pill = document.getElementById('stage-brief-pill');
+            if (!modal || !title || !body || !pill) return;
+
+            title.innerText = stage.name;
+            pill.innerText = `${stage.traps && stage.traps.length ? '🧠 NEW TACTIC' : '🐾 TRAINING'} · 3-SECOND PLAN`;
+            body.innerHTML = describeStage(stage).map(line => `<div class="stage-brief-row">${line}</div>`).join('');
+            modal.classList.add('show');
+        }
+
+        function isPointInProtectedEntity(x, y) {
+            const catRadius = nekoEntity.radius + 24;
+            if (nekoEl.style.display !== 'none' && getDistance(x, y, nekoEntity.x, nekoEntity.y) < catRadius) {
+                return { kind: 'cat', x: nekoEntity.x, y: nekoEntity.y, radius: catRadius };
+            }
+
+            for (let hive of hiveEntities) {
+                const hiveRadius = 52;
+                if (getDistance(x, y, hive.x, hive.y + 38) < hiveRadius) {
+                    return { kind: 'hive', x: hive.x, y: hive.y + 38, radius: hiveRadius };
+                }
+            }
+
+            return null;
+        }
+
+        function isPathWrappingProtectedEntity(path) {
+            if (path.length < 8) return null;
+            const first = path[0];
+            const last = path[path.length - 1];
+            if (getDistance(first.x, first.y, last.x, last.y) > 55) return null;
+
+            const targets = [
+                { kind: 'cat', x: nekoEntity.x, y: nekoEntity.y, radius: nekoEntity.radius + 18 },
+                ...hiveEntities.map(hive => ({ kind: 'hive', x: hive.x, y: hive.y + 38, radius: 42 }))
+            ];
+
+            for (let target of targets) {
+                if (isPointInsidePolygon(target.x, target.y, path)) return target;
+            }
+
+            return null;
+        }
+
+        function isPointInsidePolygon(x, y, polygon) {
+            let inside = false;
+            for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+                const xi = polygon[i].x;
+                const yi = polygon[i].y;
+                const xj = polygon[j].x;
+                const yj = polygon[j].y;
+                const intersects = ((yi > y) !== (yj > y)) &&
+                    (x < (xj - xi) * (y - yi) / ((yj - yi) || 0.00001) + xi);
+                if (intersects) inside = !inside;
+            }
+            return inside;
+        }
+
+        function showDrawWarning(target, message = 'Kediyi veya kovanı kapatma! Bir nefes koridoru bırak.') {
+            const toast = document.getElementById('draw-warning-toast');
+            if (toast) {
+                toast.innerText = `⚠️ ${message}`;
+                toast.classList.add('show');
+                clearTimeout(showDrawWarning.toastTimer);
+                showDrawWarning.toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
+            }
+
+            if (target) {
+                const layer = document.getElementById('danger-zone-layer');
+                if (layer) {
+                    const marker = document.createElement('div');
+                    marker.className = 'danger-zone-marker show';
+                    marker.style.left = `${target.x}px`;
+                    marker.style.top = `${target.y}px`;
+                    marker.style.width = `${target.radius * 2}px`;
+                    marker.style.height = `${target.radius * 2}px`;
+                    layer.appendChild(marker);
+                    setTimeout(() => marker.remove(), 900);
+                }
+            }
+
+            SoundLibrary.playHit();
         }
 
         function updateInkDisplay() {
@@ -2680,6 +3263,8 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
             document.querySelectorAll('.fireball, .cannonball, .falling-rock').forEach(p => p.remove());
             projectileEntities = [];
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawCanvas();
+            showStageBriefing(stage);
         }
 
         function spawnBee() {
@@ -3417,6 +4002,11 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
             e.preventDefault();
             const coords = getCanvasCoords(e);
 
+            const protectedTarget = isPointInProtectedEntity(coords.x, coords.y);
+            if (protectedTarget) {
+                showDrawWarning(protectedTarget, 'Buraya çizme: kedinin ve kovanın çevresi kırmızı güvenlik alanı.');
+                return;
+            }
             if (isPointInsideObstacle(coords.x, coords.y)) return;
 
             drawingMode = true;
@@ -3430,6 +4020,12 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
             e.preventDefault();
             const coords = getCanvasCoords(e);
             const lastPoint = currentPath[currentPath.length - 1];
+            const protectedTarget = isPointInProtectedEntity(coords.x, coords.y);
+            if (protectedTarget) {
+                showDrawWarning(protectedTarget, 'Kedinin/kovanın üstüne çizgi çekme; uzaktan akıllı kalkan kur.');
+                handleEnd();
+                return;
+            }
             if (isPointInsideObstacle(coords.x, coords.y)) {
                 handleEnd();
                 return;
@@ -3442,6 +4038,7 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
                 if (inkLevel < 0) inkLevel = 0;
                 updateInkDisplay();
                 if (Math.random() > 0.7) SoundLibrary.playDraw();
+                drawCanvas();
             }
         }
 
@@ -3449,6 +4046,14 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
             if (!drawingMode) return;
             if (e) e.preventDefault();
             drawingMode = false;
+
+            const wrappedTarget = isPathWrappingProtectedEntity(currentPath);
+            if (wrappedTarget) {
+                showDrawWarning(wrappedTarget, 'Tam kapalı kafes yasak: kediyi/kovanı boğmadan yönlendir.');
+                currentPath = [];
+                drawCanvas();
+                return;
+            }
 
             if (currentPath.length > 2) {
                 physicalLines.push({
@@ -3866,6 +4471,7 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
         }
 
         function runLoadingScreen() {
+            MusicManager.playLoading();
             showScreen('loading-screen', false);
             const fill = document.getElementById('load-progress');
             let progress = 0;
@@ -3876,6 +4482,7 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
                     clearInterval(interval);
                     setTimeout(() => {
                         buildMenuContent();
+                        MusicManager.playBackground();
                         showScreen('menu-screen', true);
                         document.getElementById('transition-overlay').classList.remove('active');
                     }, 400);
@@ -3893,6 +4500,11 @@ oyuna gercek fizik ekle yav ve mantık ekle ve kedinin ve kovanın etrafını ci
                 y: (clientY - rect.top) * (canvas.height / rect.height)
             };
         }
+
+        document.getElementById('btn-stage-brief-ok').addEventListener('click', () => {
+            SoundLibrary.playClick();
+            document.getElementById('stage-brief-modal').classList.remove('show');
+        });
 
         document.getElementById('coin-val').innerText = STATE.coins;
         applyActiveSkin();
