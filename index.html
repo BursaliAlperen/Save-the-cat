@@ -409,52 +409,45 @@
             left: 0;
             width: 100%;
             height: 22%;
-            background: linear-gradient(180deg, #4a3020 0%, #5c4033 20%, #4a3020 50%, #3e2b20 100%);
-            background-image:
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 2px, transparent 2px),
-                linear-gradient(rgba(0, 0, 0, 0.12) 2px, transparent 2px),
-                repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(74, 48, 32, 0.4) 20px);
-            background-size: 40px 20px, 40px 20px, 100% 20px;
-            border-top: 14px solid #2d863f;
+            background:
+                radial-gradient(ellipse at 18% 18%, rgba(255,255,255,0.25) 0%, transparent 28%),
+                radial-gradient(ellipse at 72% 35%, rgba(255,255,255,0.18) 0%, transparent 30%),
+                linear-gradient(180deg, #55ef7f 0%, #2ecc71 48%, #1fa755 100%);
+            border-top: 14px solid #7bed9f;
             box-shadow:
-                inset 0 10px 25px rgba(0,0,0,0.4),
-                inset 0 -5px 15px rgba(0,0,0,0.3),
-                0 -3px 8px rgba(45, 134, 63, 0.5),
-                inset 0 0 60px rgba(74, 48, 32, 0.3);
+                inset 0 10px 22px rgba(255,255,255,0.18),
+                inset 0 -12px 25px rgba(0,90,35,0.28),
+                0 -4px 14px rgba(46, 204, 113, 0.55);
             z-index: 5;
         }
 
         .bg-brick-ground::before {
             content: '';
             position: absolute;
-            top: -14px;
+            top: -22px;
             left: 0;
             width: 100%;
-            height: 14px;
+            height: 24px;
             background:
-                linear-gradient(90deg,
-                    #2d863f 0%,
-                    #3da64e 15%,
-                    #2c8a3f 30%,
-                    #4db85e 45%,
-                    #2d863f 60%,
-                    #3da64e 75%,
-                    #2c8a3f 90%,                    #4db85e 100%
-                );
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+                radial-gradient(circle at 10px 22px, #7bed9f 0 17px, transparent 18px),
+                radial-gradient(circle at 36px 22px, #4cd964 0 16px, transparent 17px),
+                radial-gradient(circle at 62px 22px, #2ecc71 0 18px, transparent 19px);
+            background-size: 78px 24px;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.22));
         }
 
         .bg-brick-ground::after {
             content: '';
             position: absolute;
-            top: 0;
+            top: 4px;
             left: 0;
             width: 100%;
             height: 100%;
             background-image:
-                radial-gradient(ellipse at 20% 80%, rgba(74, 48, 32, 0.4) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 60%, rgba(92, 64, 51, 0.3) 0%, transparent 40%),
-                radial-gradient(ellipse at 50% 90%, rgba(62, 43, 32, 0.25) 0%, transparent 45%);
+                linear-gradient(90deg, rgba(255,255,255,0.10) 1px, transparent 1px),
+                linear-gradient(rgba(13, 128, 55, 0.14) 1px, transparent 1px);
+            background-size: 34px 22px;
+            opacity: 0.55;
             pointer-events: none;
         }
 
@@ -836,6 +829,48 @@
             font-weight: 800;
         }
 
+        .icon-row {
+            display: grid;
+            grid-template-columns: 34px 1fr;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tutorial-icon,
+        .stage-brief-icon {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #495057;
+            border-radius: 10px;
+            background: #ffffff;
+            box-shadow: 0 2px 0 #495057;
+            padding: 5px;
+            flex: 0 0 auto;
+        }
+
+        .how-to-row {
+            margin-bottom: 10px;
+            color: #495057;
+            line-height: 1.45;
+            font-size: 0.95rem;
+        }
+
+        .explosion-ring {
+            position: absolute;
+            z-index: 98;
+            pointer-events: none;
+            border-radius: 50%;
+            border: 6px solid rgba(255, 107, 53, 0.95);
+            background: radial-gradient(circle, rgba(255,242,0,0.85) 0%, rgba(255,107,53,0.45) 42%, rgba(214,40,40,0.08) 70%);
+            transform: translate(-50%, -50%) scale(0.15);
+            animation: explosionRing 0.45s ease-out forwards;
+        }
+
+        @keyframes explosionRing {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.15); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.35); }
+        }
+
         .draw-warning-toast {
             position: absolute;
             top: calc(175px + var(--safe-area-top));
@@ -916,12 +951,13 @@
         .shop-item-price { font-size: 0.85rem; font-weight: 800; color: #27ae60; }
 
         .static-obstacle {            position: absolute;
-            background: linear-gradient(135deg, #adb5bd 0%, #6c757d 100%);
-            border: 3px solid #495057;
+            background:
+                linear-gradient(180deg, #8ff0a4 0%, #45d06f 32%, #dff7e7 34%, #b8efd0 100%);
+            border: 3px solid #2d6a4f;
             border-radius: 10px;
             box-shadow:
-                inset 0 -5px 8px rgba(0,0,0,0.2),
-                inset 0 3px 6px rgba(255,255,255,0.3),
+                inset 0 -5px 8px rgba(0,90,35,0.18),
+                inset 0 3px 6px rgba(255,255,255,0.42),
                 0 4px 8px rgba(0,0,0,0.15);
             z-index: 6;
             overflow: hidden;
@@ -936,8 +972,11 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+            height: 8px;
+            background:
+                radial-gradient(circle at 8px 8px, #b7ffbf 0 7px, transparent 8px),
+                radial-gradient(circle at 22px 8px, #55ef7f 0 7px, transparent 8px);
+            background-size: 30px 10px;
         }
 
         .rotating-saw {
@@ -1589,12 +1628,12 @@
             </svg>
         </div>
 
-        <div class="draw-warning-toast" id="draw-warning-toast">⚠️ Kediyi veya kovanı kapatma! Bir nefes koridoru bırak.</div>
+        <div class="draw-warning-toast" id="draw-warning-toast">Kediyi veya kovanı kapatma! Bir nefes koridoru bırak.</div>
         <div id="danger-zone-layer"></div>
 
         <div class="modal-overlay" id="stage-brief-modal">
             <div class="modal-content stage-brief-card">
-                <div class="stage-brief-pill" id="stage-brief-pill">🧠 SMART STAGE</div>
+                <div class="stage-brief-pill" id="stage-brief-pill">SMART STAGE</div>
                 <h2 class="modal-title" id="stage-brief-title">Stage Briefing</h2>
                 <div class="stage-brief-grid" id="stage-brief-body"></div>
                 <button class="menu-btn primary" id="btn-stage-brief-ok">OK, LET ME DRAW!</button>
@@ -1636,11 +1675,11 @@
             <div class="modal-content">
                 <h2 class="modal-title" style="color: #27ae60;">HOW TO PLAY</h2>
                 <div style="text-align: left; margin-bottom: 20px; color: #495057; line-height: 1.6; font-size: 0.95rem;">
-                    <p style="margin-bottom: 10px;">🎨 <strong>Draw Shields:</strong> Swipe your finger to draw protective barriers around the cat.</p>
-                    <p style="margin-bottom: 10px;">🐝 <strong>Release Bees:</strong> Tap "Release Bees" to start the attack. Keep the cat safe for 8 seconds!</p>
-                    <p style="margin-bottom: 10px;">⚙️ <strong>Physics:</strong> The cat falls and rolls! Keep it secure and away from the traps.</p>
-                    <p style="margin-bottom: 10px;">🌋 <strong>Themes:</strong> Watch out for lava (burns!), ice (slippery!), and many more traps!</p>
-                    <p style="margin-bottom: 10px;">🧠 <strong>Think Smart:</strong> Use your brain to protect the cat from 30+ different traps!</p>
+                    <p class="how-to-row icon-row"><span class="tutorial-icon" data-icon="draw"></span><span><strong>Draw Shields:</strong> Swipe your finger to draw protective barriers around the cat.</span></p>
+                    <p class="how-to-row icon-row"><span class="tutorial-icon" data-icon="bee"></span><span><strong>Release Bees:</strong> Tap "Release Bees" to start the attack. Keep the cat safe for 8 seconds!</span></p>
+                    <p class="how-to-row icon-row"><span class="tutorial-icon" data-icon="physics"></span><span><strong>Physics:</strong> The cat and your drawn wall fall, roll, collide, and push each other.</span></p>
+                    <p class="how-to-row icon-row"><span class="tutorial-icon" data-icon="bomb"></span><span><strong>Stage Traps:</strong> Bombs, cannons, spikes, grass platforms, and moving hazards are introduced gently.</span></p>
+                    <p class="how-to-row icon-row"><span class="tutorial-icon" data-icon="next"></span><span><strong>Next:</strong> Pass simple, readable levels one by one without overthinking.</span></p>
                 </div>
                 <button class="menu-btn primary" id="btn-close-info">UNDERSTOOD!</button>
             </div>
@@ -1785,33 +1824,52 @@
             loading: document.getElementById('loading-music'),
             background: document.getElementById('background-music'),
             unlocked: false,
+            desiredTrack: 'background',
             init: function() {
                 [this.loading, this.background].forEach(audio => {
                     if (!audio) return;
-                    audio.volume = 0.42;
+                    audio.volume = audio === this.loading ? 0.36 : 0.42;
                     audio.loop = true;
+                    audio.preload = 'auto';
+                    audio.setAttribute('playsinline', '');
+                    audio.load();
                 });
 
                 const unlock = () => {
+                    SoundLibrary.initAudio();
                     this.unlocked = true;
-                    this.playBackground();
-                    window.removeEventListener('pointerdown', unlock);
-                    window.removeEventListener('touchstart', unlock);
+                    this.playDesired();
                 };
 
-                window.addEventListener('pointerdown', unlock, { once: true });
-                window.addEventListener('touchstart', unlock, { once: true });
+                ['pointerdown', 'touchstart', 'click', 'keydown'].forEach(eventName => {
+                    window.addEventListener(eventName, unlock, { passive: true });
+                });
+            },
+            playDesired: function() {
+                if (this.desiredTrack === 'loading') {
+                    this.playLoading();
+                } else {
+                    this.playBackground();
+                }
+            },
+            safePlay: function(audio) {
+                if (!audio || !this.unlocked) return;
+                audio.play().catch(() => {
+                    this.unlocked = false;
+                });
             },
             playLoading: function() {
+                this.desiredTrack = 'loading';
                 if (!this.loading) return;
                 if (this.background) this.background.pause();
-                this.loading.currentTime = 0;
-                this.loading.play().catch(() => {});
+                if (this.loading.paused) this.loading.currentTime = 0;
+                this.safePlay(this.loading);
             },
             playBackground: function() {
+                this.desiredTrack = 'background';
                 if (!this.background) return;
                 if (this.loading) this.loading.pause();
-                this.background.play().catch(() => {});
+                this.safePlay(this.background);
             },
             stopAll: function() {
                 if (this.loading) this.loading.pause();
@@ -2434,14 +2492,110 @@
             }
         ];
 
+        const SAVE_DOG_REFERENCE_LEVELS = [
+            {
+                name: "Stage A: Grass Pocket",
+                theme: THEMES.GRASS,
+                cat: { x: 0.52, y: 0.60 },
+                hives: [{ x: 0.18, y: 0.20 }],
+                obstacles: [
+                    { type: 'rect', x: 0.42, y: 0.70, w: 142, h: 22 }
+                ],
+                traps: []
+            },
+            {
+                name: "Stage B: Two Bee Hills",
+                theme: THEMES.GRASS,
+                cat: { x: 0.50, y: 0.58 },
+                hives: [{ x: 0.18, y: 0.22 }, { x: 0.82, y: 0.22 }],
+                obstacles: [
+                    { type: 'rect', x: 0.30, y: 0.68, w: 96, h: 20 },
+                    { type: 'rect', x: 0.56, y: 0.68, w: 96, h: 20 }
+                ],
+                traps: []
+            },
+            {
+                name: "Stage C: Soft Bomb Lesson",
+                theme: THEMES.GRASS,
+                cat: { x: 0.68, y: 0.58 },
+                hives: [{ x: 0.20, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.56, y: 0.68, w: 122, h: 22 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.BOMB, x: 0.42, y: 0.38, r: 28 }
+                ]
+            },
+            {
+                name: "Stage D: Drawn Wall Drop",
+                theme: THEMES.GRASS,
+                cat: { x: 0.30, y: 0.56 },
+                hives: [{ x: 0.78, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.18, y: 0.68, w: 118, h: 22 },
+                    { type: 'rect', x: 0.64, y: 0.54, w: 100, h: 18 }
+                ],
+                traps: []
+            },
+            {
+                name: "Stage E: Spike Bridge",
+                theme: THEMES.GRASS,
+                cat: { x: 0.28, y: 0.56 },
+                hives: [{ x: 0.75, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.16, y: 0.66, w: 105, h: 20 },
+                    { type: 'rect', x: 0.62, y: 0.66, w: 105, h: 20 },
+                    { type: 'spikes', x: 0.40, y: 0.76, w: 0.22, h: 28 }
+                ],
+                traps: []
+            },
+            {
+                name: "Stage F: Cannon Ramp",
+                theme: THEMES.DESERT,
+                cat: { x: 0.62, y: 0.54 },
+                hives: [{ x: 0.22, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.52, y: 0.64, w: 128, h: 22 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.CANNON, x: 0.10, y: 0.42, angle: 12 }
+                ]
+            },
+            {
+                name: "Stage G: Time Bomb Roof",
+                theme: THEMES.GRASS,
+                cat: { x: 0.50, y: 0.58 },
+                hives: [{ x: 0.50, y: 0.16 }],
+                obstacles: [
+                    { type: 'rect', x: 0.38, y: 0.68, w: 136, h: 22 }
+                ],
+                traps: [
+                    { type: TRAP_TYPES.TIME_BOMB, x: 0.50, y: 0.34, timer: 7 }
+                ]
+            },
+            {
+                name: "Stage H: Easy Lava Island",
+                theme: THEMES.LAVA,
+                cat: { x: 0.52, y: 0.50 },
+                hives: [{ x: 0.22, y: 0.18 }],
+                obstacles: [
+                    { type: 'rect', x: 0.42, y: 0.60, w: 132, h: 22 }
+                ],
+                traps: []
+            }
+        ];
+
+        const ALL_LEVELS = [...SAVE_DOG_REFERENCE_LEVELS, ...HANDCRAFTED_LEVELS];
+
+
         function seededRandom(seed) {
             const x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
         }
 
         function getStageConfig(levelNum) {
-            if (levelNum <= HANDCRAFTED_LEVELS.length) {
-                const stage = JSON.parse(JSON.stringify(HANDCRAFTED_LEVELS[levelNum - 1]));
+            if (levelNum <= ALL_LEVELS.length) {
+                const stage = JSON.parse(JSON.stringify(ALL_LEVELS[levelNum - 1]));
                 stage.name = `Level ${levelNum}: ${stage.name.split(': ')[1]}`;
                 return stage;
             }
@@ -2662,39 +2816,66 @@
         }
 
 
+        function iconSvg(kind) {
+            const icons = {
+                draw: '<svg viewBox="0 0 32 32"><path d="M7 24c5-1 6-5 9-10l4-7 5 3-4 7c-3 5-5 8-10 10l-5 1 1-4z" fill="#74b9ff" stroke="#495057" stroke-width="2" stroke-linejoin="round"/><path d="M19 7l5 3" stroke="#fff" stroke-width="2"/></svg>',
+                bee: '<svg viewBox="0 0 32 32"><ellipse cx="12" cy="9" rx="5" ry="7" fill="#dff9fb" stroke="#495057" stroke-width="1.5"/><ellipse cx="20" cy="9" rx="5" ry="7" fill="#dff9fb" stroke="#495057" stroke-width="1.5"/><ellipse cx="16" cy="19" rx="11" ry="8" fill="#ffd166" stroke="#495057" stroke-width="2"/><path d="M9 15v8M16 13v12M23 15v8" stroke="#495057" stroke-width="2"/><path d="M27 19l4-2-2 5z" fill="#495057"/></svg>',
+                physics: '<svg viewBox="0 0 32 32"><circle cx="10" cy="22" r="5" fill="#ffd166" stroke="#495057" stroke-width="2"/><rect x="15" y="8" width="12" height="17" rx="3" fill="#a29bfe" stroke="#495057" stroke-width="2" transform="rotate(12 21 16)"/><path d="M5 8c8-5 17-2 21 5" fill="none" stroke="#2ecc71" stroke-width="3" stroke-linecap="round"/></svg>',
+                bomb: '<svg viewBox="0 0 32 32"><circle cx="15" cy="18" r="9" fill="#2d3436" stroke="#495057" stroke-width="2"/><path d="M20 10l4-5M22 7c3 0 5 2 5 5" fill="none" stroke="#ff6b35" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="15" r="2" fill="#fff" opacity=".75"/></svg>',
+                trap: '<svg viewBox="0 0 32 32"><path d="M4 25h24L16 5z" fill="#ff7675" stroke="#495057" stroke-width="2"/><path d="M16 12v7" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="23" r="1.7" fill="#fff"/></svg>',
+                goal: '<svg viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#fff" stroke="#495057" stroke-width="2"/><circle cx="16" cy="16" r="8" fill="#74b9ff"/><circle cx="16" cy="16" r="4" fill="#ff7675"/></svg>',
+                theme: '<svg viewBox="0 0 32 32"><path d="M5 24c5-6 8-6 12-2 4 4 7 3 10-2v7H5z" fill="#2ecc71" stroke="#495057" stroke-width="2"/><circle cx="23" cy="9" r="5" fill="#ffd166" stroke="#495057" stroke-width="2"/></svg>',
+                warning: '<svg viewBox="0 0 32 32"><rect x="5" y="5" width="22" height="22" rx="6" fill="#ff7675" stroke="#495057" stroke-width="2"/><path d="M11 11l10 10M21 11L11 21" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>',
+                next: '<svg viewBox="0 0 32 32"><path d="M7 16h15" stroke="#495057" stroke-width="4" stroke-linecap="round"/><path d="M17 8l8 8-8 8" fill="none" stroke="#2ecc71" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            };
+            return icons[kind] || icons.trap;
+        }
+
+        function hydrateInlineIcons(root = document) {
+            root.querySelectorAll('[data-icon]').forEach(el => {
+                el.innerHTML = iconSvg(el.dataset.icon);
+            });
+        }
+
+        function iconForTrap(type) {
+            if ([TRAP_TYPES.BOMB, TRAP_TYPES.TIME_BOMB].includes(type)) return 'bomb';
+            if ([TRAP_TYPES.SAW, TRAP_TYPES.SPIKES, TRAP_TYPES.SPIKE_BALL, TRAP_TYPES.FIRE_WALL, TRAP_TYPES.FIRE_JET, TRAP_TYPES.LASER].includes(type)) return 'trap';
+            return 'physics';
+        }
+
         const TRAP_TUTORIALS = {
-            saw: ['🪚 Rotating saws punish straight shields.', 'Angle your line so the cat rolls away, not into the blade.'],
-            spikes: ['🔺 Spikes are instant danger zones.', 'Build a roof or cradle that keeps physics from sliding the cat downward.'],
-            moving_platform: ['↔️ Moving platforms shove anything resting on them.', 'Leave enough space for platform travel before releasing bees.'],
-            laser: ['🔴 Lasers burn across a lane.', 'Draw a thick diagonal baffle, then keep the cat outside the beam path.'],
-            fireball: ['🔥 Fire launchers shoot projectiles.', 'Curved shields deflect better than flat walls.'],
-            wind_fan: ['💨 Fans push the cat and bees.', 'Use hooks and pockets so the wind cannot peel the shield away.'],
-            magnet: ['🧲 Magnets bend movement toward their core.', 'Do not draw tight cages; give the cat a safe drift buffer.'],
-            portal: ['🌀 Portals teleport threats.', 'Protect both portal exits before pressing release.'],
-            bomb: ['💣 Bombs explode on contact.', 'Keep shield lines away from the blast center.'],
-            electric: ['⚡ Electric fields shock through open gaps.', 'Close the bee side, but leave breathing room around the cat.'],
-            acid: ['🧪 Acid pools melt unsafe routes.', 'Bridge the pool with a line that cannot tip into it.'],
-            falling_rock: ['🪨 Falling rocks add gravity pressure.', 'A sloped roof sheds rocks away from the cat.'],
-            spider_web: ['🕸️ Webs slow movement.', 'Use the slow zone to your advantage by redirecting bees.'],
-            ghost: ['👻 Ghosts phase around simple walls.', 'Layer two angled barriers instead of one straight line.'],
-            bouncer: ['🟣 Bouncers launch the cat.', 'Cup the cat from above so rebounds stay controlled.'],
-            conveyor: ['➡️ Conveyors drag objects sideways.', 'Anchor the shield against the direction of travel.'],
-            cannon: ['🏰 Cannons fire heavy shots.', 'Give cannonballs a ramp that sends them away.'],
-            black_hole: ['⚫ Black holes pull everything inward.', 'Protect from the pull direction and avoid tight cages.'],
-            time_bomb: ['⏱️ Timed bombs trigger during survival.', 'Draw blast deflectors before the timer reaches zero.'],
-            freeze_ray: ['❄️ Freeze rays make movement brittle.', 'Block the ray with a line that also supports the cat.'],
-            poison_cloud: ['☠️ Poison clouds expand and pulse.', 'Keep the cat above or beside the cloud radius.'],
-            swinging_axe: ['🪓 Swinging axes sweep an arc.', 'Draw outside the arc; do not rely on a tiny wall.'],
-            rolling_boulder: ['⚙️ Boulders roll with momentum.', 'A wedge-shaped ramp is safer than a vertical wall.'],
-            trap_door: ['🚪 Trap doors can open below you.', 'Give the cat a second floor before release.'],
-            spike_ball: ['🔴 Spike balls patrol round spaces.', 'Use concave shields to redirect their bounce.'],
-            fire_jet: ['🌋 Fire jets burst upward.', 'Bridge over them and keep the cat away from the flame column.'],
-            ice_wall: ['🧊 Ice walls change bounce angles.', 'Soft curves beat hard corners on ice stages.'],
-            gravity_well: ['🪐 Gravity wells bend trajectories.', 'Use a wide shelter with an escape buffer.'],
-            mirror: ['🪞 Mirrors reflect hazards.', 'Angle your shield so reflections miss the cat.'],
-            ice_spike: ['💎 Ice spikes are sharp and slippery.', 'Do not let the cat roll down into their tips.'],
-            fire_wall: ['🔥 Fire walls deny a whole corridor.', 'Create a detour lane and deflect bees before the wall.'],
-            wind_tunnel: ['🌪️ Wind tunnels apply continuous force.', 'Hook the shield into the wind like an umbrella.']
+            saw: ['Rotating saws punish straight shields.', 'Angle your line so the cat rolls away, not into the blade.'],
+            spikes: ['Spikes are instant danger zones.', 'Build a roof or cradle that keeps physics from sliding the cat downward.'],
+            moving_platform: ['Moving platforms shove anything resting on them.', 'Leave enough space for platform travel before releasing bees.'],
+            laser: ['Lasers burn across a lane.', 'Draw a thick diagonal baffle, then keep the cat outside the beam path.'],
+            fireball: ['Fire launchers shoot projectiles.', 'Curved shields deflect better than flat walls.'],
+            wind_fan: ['Fans push the cat and bees.', 'Use hooks and pockets so the wind cannot peel the shield away.'],
+            magnet: ['Magnets bend movement toward their core.', 'Do not draw tight cages; give the cat a safe drift buffer.'],
+            portal: ['Portals teleport threats.', 'Protect both portal exits before pressing release.'],
+            bomb: ['Bombs explode on contact with the cat, bees, or drawn walls.', 'Keep shield lines away from the blast center or use them to trigger from far away.'],
+            electric: ['Electric fields shock through open gaps.', 'Close the bee side, but leave breathing room around the cat.'],
+            acid: ['Acid pools melt unsafe routes.', 'Bridge the pool with a line that cannot tip into it.'],
+            falling_rock: ['Falling rocks add gravity pressure.', 'A sloped roof sheds rocks away from the cat.'],
+            spider_web: ['Webs slow movement.', 'Use the slow zone to your advantage by redirecting bees.'],
+            ghost: ['Ghosts phase around simple walls.', 'Layer two angled barriers instead of one straight line.'],
+            bouncer: ['Bouncers launch the cat.', 'Cup the cat from above so rebounds stay controlled.'],
+            conveyor: ['Conveyors drag objects sideways.', 'Anchor the shield against the direction of travel.'],
+            cannon: ['Cannons fire heavy shots.', 'Give cannonballs a ramp that sends them away.'],
+            black_hole: ['Black holes pull everything inward.', 'Protect from the pull direction and avoid tight cages.'],
+            time_bomb: ['Timed bombs trigger during survival.', 'Draw blast deflectors before the timer reaches zero.'],
+            freeze_ray: ['Freeze rays make movement brittle.', 'Block the ray with a line that also supports the cat.'],
+            poison_cloud: ['Poison clouds expand and pulse.', 'Keep the cat above or beside the cloud radius.'],
+            swinging_axe: ['Swinging axes sweep an arc.', 'Draw outside the arc; do not rely on a tiny wall.'],
+            rolling_boulder: ['Boulders roll with momentum.', 'A wedge-shaped ramp is safer than a vertical wall.'],
+            trap_door: ['Trap doors can open below you.', 'Give the cat a second floor before release.'],
+            spike_ball: ['Spike balls patrol round spaces.', 'Use concave shields to redirect their bounce.'],
+            fire_jet: ['Fire jets burst upward.', 'Bridge over them and keep the cat away from the flame column.'],
+            ice_wall: ['Ice walls change bounce angles.', 'Soft curves beat hard corners on ice stages.'],
+            gravity_well: ['Gravity wells bend trajectories.', 'Use a wide shelter with an escape buffer.'],
+            mirror: ['Mirrors reflect hazards.', 'Angle your shield so reflections miss the cat.'],
+            ice_spike: ['Ice spikes are sharp and slippery.', 'Do not let the cat roll down into their tips.'],
+            fire_wall: ['Fire walls deny a whole corridor.', 'Create a detour lane and deflect bees before the wall.'],
+            wind_tunnel: ['Wind tunnels apply continuous force.', 'Hook the shield into the wind like an umbrella.']
         };
 
         const THEME_TIPS = {
@@ -2708,14 +2889,14 @@
         function describeStage(stage) {
             const uniqueTraps = [...new Set((stage.traps || []).map(trap => trap.type))];
             const trapLines = uniqueTraps.length
-                ? uniqueTraps.slice(0, 3).flatMap(type => TRAP_TUTORIALS[type] || [`⚠️ New trap: ${type}`, 'Study the motion, then draw a smart shield.'])
-                : ['🐝 No special trap yet: learn the shield rhythm.', 'Draw a shelter, then release bees when the cat has room to breathe.'];
+                ? uniqueTraps.slice(0, 3).flatMap(type => (TRAP_TUTORIALS[type] || [`New trap: ${type}`, 'Study the motion, then draw a simple shield.']).map(text => ({ icon: iconForTrap(type), text })))
+                : [{ icon: 'bee', text: 'No special trap yet: learn the shield rhythm.' }, { icon: 'draw', text: 'Draw a shelter, then release bees when the cat has room to breathe.' }];
 
             return [
-                `🎯 Goal: survive ${timerSeconds} seconds after releasing bees.`,
-                `🌍 Theme: ${THEME_TIPS[stage.theme] || THEME_TIPS.grass}`,
+                { icon: 'goal', text: `Goal: survive ${timerSeconds} seconds after releasing bees.` },
+                { icon: 'theme', text: `Theme: ${THEME_TIPS[stage.theme] || THEME_TIPS.grass}` },
                 ...trapLines.slice(0, 4),
-                '🚫 Red zones mean: do not draw directly around the cat or the hive.'
+                { icon: 'warning', text: 'Red zones mean: do not draw directly around the cat or the hive.' }
             ];
         }
 
@@ -2727,8 +2908,14 @@
             if (!modal || !title || !body || !pill) return;
 
             title.innerText = stage.name;
-            pill.innerText = `${stage.traps && stage.traps.length ? '🧠 NEW TACTIC' : '🐾 TRAINING'} · 3-SECOND PLAN`;
-            body.innerHTML = describeStage(stage).map(line => `<div class="stage-brief-row">${line}</div>`).join('');
+            pill.innerText = `${stage.traps && stage.traps.length ? 'NEW TACTIC' : 'TRAINING'} · 3-SECOND PLAN`;
+            body.innerHTML = describeStage(stage).map(row => `
+                <div class="stage-brief-row icon-row">
+                    <span class="stage-brief-icon" data-icon="${row.icon}"></span>
+                    <span>${row.text}</span>
+                </div>
+            `).join('');
+            hydrateInlineIcons(body);
             modal.classList.add('show');
         }
 
@@ -2783,7 +2970,7 @@
         function showDrawWarning(target, message = 'Kediyi veya kovanı kapatma! Bir nefes koridoru bırak.') {
             const toast = document.getElementById('draw-warning-toast');
             if (toast) {
-                toast.innerText = `⚠️ ${message}`;
+                toast.innerText = message;
                 toast.classList.add('show');
                 clearTimeout(showDrawWarning.toastTimer);
                 showDrawWarning.toastTimer = setTimeout(() => toast.classList.remove('show'), 1500);
@@ -2848,27 +3035,27 @@
             if (currentTheme === THEMES.LAVA) {
                 ground.classList.add('bg-lava-ground');
                 indicator.className = 'theme-indicator theme-lava';
-                indicator.innerText = '🌋 LAVA';
+                indicator.innerText = 'LAVA';
                 indicator.style.display = 'block';
             } else if (currentTheme === THEMES.ICE) {
                 ground.classList.add('bg-ice-ground');
                 indicator.className = 'theme-indicator theme-ice';
-                indicator.innerText = '❄️ ICE';
+                indicator.innerText = 'ICE';
                 indicator.style.display = 'block';
             } else if (currentTheme === THEMES.DESERT) {
                 ground.classList.add('bg-desert-ground');
                 indicator.className = 'theme-indicator theme-desert';
-                indicator.innerText = '🏜️ DESERT';
+                indicator.innerText = 'DESERT';
                 indicator.style.display = 'block';
             } else if (currentTheme === THEMES.SPACE) {
                 ground.classList.add('bg-space-ground');
                 indicator.className = 'theme-indicator theme-space';
-                indicator.innerText = '🚀 SPACE';
+                indicator.innerText = 'SPACE';
                 indicator.style.display = 'block';
             } else {
                 ground.classList.add('bg-brick-ground');
                 indicator.className = 'theme-indicator theme-grass';
-                indicator.innerText = '🌿 GRASS';
+                indicator.innerText = 'GRASS';
                 indicator.style.display = 'block';
             }
 
@@ -3293,14 +3480,30 @@
             beeHtml.style.height = `${size}px`;
 
             beeHtml.innerHTML = `
-                <svg viewBox="0 0 40 40" style="width:100%; height:100%;">
-                    <ellipse class="bee-wing" cx="14" cy="10" rx="5" ry="10" fill="#e0f7fa" opacity="0.85" stroke="#495057" stroke-width="1.5"/>
-                    <ellipse class="bee-wing" cx="26" cy="10" rx="5" ry="10" fill="#e0f7fa" opacity="0.85" stroke="#495057" stroke-width="1.5"/>
-                    <ellipse cx="20" cy="24" rx="14" ry="11" fill="#f1c40f" stroke="#495057" stroke-width="3"/>
-                    <polygon points="32,24 39,21 34,26" fill="#495057"/>
-                    <path d="M 14 14 Q 14 34 14 34 M 20 13 Q 20 35 20 35 M 26 14 Q 26 34 26 34" stroke="#495057" stroke-width="3" fill="none"/>
-                    <ellipse cx="14" cy="21" rx="2.5" ry="3.5" fill="#495057"/>
-                    <ellipse cx="26" cy="21" rx="2.5" ry="3.5" fill="#495057"/>
+                <svg viewBox="0 0 64 64" style="width:100%; height:100%; filter: drop-shadow(0 3px 4px rgba(0,0,0,0.25));">
+                    <defs>
+                        <radialGradient id="beeBodyGrad-${id}" cx="35%" cy="28%" r="70%">
+                            <stop offset="0%" stop-color="#fff7a8"/>
+                            <stop offset="45%" stop-color="#ffd166"/>
+                            <stop offset="100%" stop-color="#f39c12"/>
+                        </radialGradient>
+                        <linearGradient id="beeWingGrad-${id}" x1="0" x2="1">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                            <stop offset="100%" stop-color="#74b9ff" stop-opacity="0.55"/>
+                        </linearGradient>
+                    </defs>
+                    <ellipse class="bee-wing" cx="22" cy="17" rx="9" ry="16" fill="url(#beeWingGrad-${id})" stroke="#495057" stroke-width="2"/>
+                    <ellipse class="bee-wing" cx="41" cy="17" rx="9" ry="16" fill="url(#beeWingGrad-${id})" stroke="#495057" stroke-width="2"/>
+                    <path d="M15 37 C15 24 25 19 36 20 C48 22 56 30 54 40 C51 52 38 56 25 51 C18 49 15 44 15 37Z" fill="url(#beeBodyGrad-${id})" stroke="#2d3436" stroke-width="4" stroke-linejoin="round"/>
+                    <path d="M25 22 C22 30 22 43 26 51 M35 20 C31 30 31 45 37 54 M45 25 C41 33 42 45 48 50" stroke="#2d3436" stroke-width="4.5" stroke-linecap="round" opacity="0.9"/>
+                    <path d="M52 38 L63 34 L56 44Z" fill="#2d3436"/>
+                    <circle cx="27" cy="34" r="4.2" fill="#ffffff" stroke="#2d3436" stroke-width="2"/>
+                    <circle cx="40" cy="34" r="4.2" fill="#ffffff" stroke="#2d3436" stroke-width="2"/>
+                    <circle cx="28" cy="35" r="1.7" fill="#2d3436"/>
+                    <circle cx="41" cy="35" r="1.7" fill="#2d3436"/>
+                    <path d="M28 45 Q34 49 41 45" stroke="#2d3436" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M20 21 C15 15 10 15 7 19 M44 22 C49 15 55 15 58 19" stroke="#2d3436" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                    <path d="M20 14 C23 18 27 20 31 20 M36 20 C40 19 44 17 47 13" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.8"/>
                 </svg>
             `;
             container.appendChild(beeHtml);
@@ -3347,6 +3550,72 @@
                 ctx.lineTo(line.x + lastPt.x, line.y + lastPt.y);
                 ctx.stroke();
             });
+        }
+
+        function triggerBombExplosion(trap, source = 'contact') {
+            if (!trap.active) return false;
+            trap.active = false;
+            if (trap.el) {
+                trap.el.style.display = 'none';
+            }
+            SoundLibrary.playExplosion();
+
+            const ring = document.createElement('div');
+            ring.className = 'explosion-ring';
+            ring.style.left = `${trap.x}px`;
+            ring.style.top = `${trap.y}px`;
+            ring.style.width = `${(trap.r || 32) * 4}px`;
+            ring.style.height = `${(trap.r || 32) * 4}px`;
+            container.appendChild(ring);
+            setTimeout(() => ring.remove(), 520);
+            createBurnEffect(trap.x, trap.y);
+
+            const catDist = getDistance(nekoEntity.x, nekoEntity.y, trap.x, trap.y);
+            const blastRadius = trap.blastRadius || 116;
+            if (catDist < blastRadius) {
+                const angle = Math.atan2(nekoEntity.y - trap.y, nekoEntity.x - trap.x);
+                const force = (1 - catDist / blastRadius) * 18;
+                nekoEntity.vx += Math.cos(angle) * force;
+                nekoEntity.vy += Math.sin(angle) * force;
+                if (catDist < nekoEntity.radius + 58) {
+                    endLevel(false);
+                    return true;
+                }
+            }
+
+            physicalLines.forEach(line => {
+                let closest = Infinity;
+                line.points.forEach(pt => {
+                    closest = Math.min(closest, getDistance(line.x + pt.x, line.y + pt.y, trap.x, trap.y));
+                });
+                if (closest < blastRadius) {
+                    const angle = Math.atan2(line.y - trap.y, line.x - trap.x);
+                    const force = (1 - closest / blastRadius) * 12;
+                    line.vx += Math.cos(angle) * force;
+                    line.vy += Math.sin(angle) * force - 2;
+                    line.isStatic = false;
+                }
+            });
+
+            bees = bees.filter(bee => {
+                if (getDistance(bee.x, bee.y, trap.x, trap.y) < blastRadius * 0.72) {
+                    const beeHtml = document.getElementById(`bee-${bee.id}`);
+                    if (beeHtml) beeHtml.remove();
+                    return false;
+                }
+                return true;
+            });
+            return source === 'cat' && catDist < blastRadius;
+        }
+
+        function lineTouchesCircle(line, cx, cy, radius) {
+            for (let i = 0; i < line.points.length - 1; i++) {
+                const p1 = line.points[i];
+                const p2 = line.points[i + 1];
+                const hit = getDistanceToSegment(cx, cy, line.x + p1.x, line.y + p1.y, line.x + p2.x, line.y + p2.y);
+                if (hit.dist < radius) return true;
+            }
+            return false;
         }
 
         function updatePhysics() {
@@ -3476,6 +3745,15 @@
                             endLevel(false);
                             return;
                         }
+                    } else if (trap.type === TRAP_TYPES.BOMB) {
+                        const bombRadius = trap.r || 28;
+                        const catHit = getDistance(nekoEntity.x, nekoEntity.y, trap.x, trap.y) < nekoEntity.radius + bombRadius;
+                        const lineHit = physicalLines.some(line => lineTouchesCircle(line, trap.x, trap.y, bombRadius + 7));
+                        const beeHit = bees.some(bee => getDistance(bee.x, bee.y, trap.x, trap.y) < bee.radius + bombRadius);
+                        if (catHit || lineHit || beeHit) {
+                            triggerBombExplosion(trap, catHit ? 'cat' : 'contact');
+                            return;
+                        }
                     } else if (trap.type === TRAP_TYPES.BOUNCER) {                        const dist = getDistance(nekoEntity.x, nekoEntity.y, trap.x, trap.y);
                         if (dist < nekoEntity.radius + (trap.r || 30)) {
                             const angle = Math.atan2(nekoEntity.y - trap.y, nekoEntity.x - trap.x);
@@ -3598,15 +3876,8 @@
                             }
                         }
                         if (trap.timer <= 0) {
-                            const dist = getDistance(nekoEntity.x, nekoEntity.y, trap.x, trap.y);
-                            if (dist < 100) {
-                                SoundLibrary.playExplosion();
-                                createBurnEffect(trap.x, trap.y);
-                                endLevel(false);
-                                return;
-                            }
-                            trap.active = false;
-                            if (trap.el) trap.el.style.display = 'none';
+                            triggerBombExplosion(trap, 'timer');
+                            return;
                         }
                     } else if (trap.type === TRAP_TYPES.FIREBALL || trap.type === TRAP_TYPES.CANNON) {
                         if (globalTime % 120 === 0) {
@@ -3895,6 +4166,40 @@
                     proj.el.style.top = `${proj.y - 15}px`;
                 }
                 
+                let reflected = false;
+                physicalLines.forEach(line => {
+                    if (reflected) return;
+                    for (let j = 0; j < line.points.length - 1; j++) {
+                        const p1 = line.points[j];
+                        const p2 = line.points[j + 1];
+                        const segment = getDistanceToSegment(proj.x, proj.y, line.x + p1.x, line.y + p1.y, line.x + p2.x, line.y + p2.y);
+                        if (segment.dist < proj.radius + 7) {
+                            const nx = (proj.x - segment.x) / Math.max(segment.dist, 0.001);
+                            const ny = (proj.y - segment.y) / Math.max(segment.dist, 0.001);
+                            const dot = proj.vx * nx + proj.vy * ny;
+                            proj.vx -= 2 * dot * nx;
+                            proj.vy -= 2 * dot * ny;
+                            proj.x = segment.x + nx * (proj.radius + 9);
+                            proj.y = segment.y + ny * (proj.radius + 9);
+                            line.vx -= nx * 1.4;
+                            line.vy -= ny * 1.4;
+                            line.isStatic = false;
+                            reflected = true;
+                            SoundLibrary.playHit();
+                            createSparkle(proj.x, proj.y);
+                            break;
+                        }
+                    }
+                });
+
+                const bomb = trapEntities.find(trap => trap.active && trap.type === TRAP_TYPES.BOMB && getDistance(proj.x, proj.y, trap.x, trap.y) < proj.radius + (trap.r || 28));
+                if (bomb) {
+                    if (proj.el) proj.el.remove();
+                    projectileEntities.splice(i, 1);
+                    triggerBombExplosion(bomb, 'projectile');
+                    continue;
+                }
+
                 const dist = getDistance(nekoEntity.x, nekoEntity.y, proj.x, proj.y);
                 if (dist < nekoEntity.radius + proj.radius) {
                     SoundLibrary.playExplosion();
@@ -4062,7 +4367,8 @@
                     vx: 0,
                     vy: 0,
                     points: [...currentPath],
-                    isStatic: true
+                    isStatic: false,
+                    mass: Math.max(1, currentPath.length / 12)
                 });
                 SoundLibrary.playShield();
                 drawCanvas();
@@ -4105,7 +4411,13 @@
 
             setNekoState('scared');
 
-            const beeCount = 6 + Math.min(STATE.level, 15);
+            physicalLines.forEach(line => {
+                line.isStatic = false;
+                line.vx += (Math.random() - 0.5) * 0.18;
+                line.vy += 0.35;
+            });
+
+            const beeCount = 5 + Math.min(STATE.level, 12);
             for (let i = 0; i < beeCount; i++) {
                 setTimeout(() => {
                     spawnBee();
