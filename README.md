@@ -23,3 +23,9 @@ Open `index.html` in a browser, or serve the repository directory with a local s
 - Survival starts only after the player presses the bee release button.
 - The handmade stage pack now covers multiple unique trap combinations before procedural levels continue.
 - Loading and background music are separated for clearer presentation polish.
+
+- Save-the-Dog-style reference stages: the opening pack now starts with simple grass shelters, two-hive layouts, soft bomb lessons, cannon ramps, and time-bomb roof practice before harder generated stages.
+- Icon-based tutorial UI: tutorial and stage briefing rows now use inline SVG icons instead of emoji labels.
+- Contact bombs and dynamic ink physics: drawn shields become physical bodies during survival, while bombs explode when touched by cats, bees, or drawn walls.
+- Grass-only main ground: the default stage floor now keeps the grass look without the old dirt/soil texture.
+- Music unlock fix: loading and background tracks now retry after the first user gesture so mobile browsers can start audio reliably.
